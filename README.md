@@ -1,4 +1,5 @@
 class Game:
+
     def __init__(self):
         self.maze = None
         
@@ -49,12 +50,14 @@ class Game:
         
     
 class MapElement:
+
     def __init__(self):
         pass
     def entrar(self):
         pass
 
 class Maze(MapElement):
+
     def __init__(self):
         self.rooms = []
 
@@ -66,14 +69,17 @@ class Maze(MapElement):
         
         
 class Hoja(MapElement):
+
     def accept(self, visitor):
         visitor.visitHoja(self)
 
 class Decorator(Hoja):
+
     def __init__(self, component):
         self.component = component
         
 class Contenedor(MapElement):
+
     def __init__(self):
         self.hijos=[]
         
@@ -85,6 +91,7 @@ class Contenedor(MapElement):
 
 
 class Room(MapElement):
+
     def __init__(self, id):         
         self.north = Wall()
         self.east = Wall()
@@ -98,10 +105,12 @@ class Room(MapElement):
         
         
 class Door(MapElement):
+
     def __init__(self, side1, side2):
         self.side1 = side1
         self.side2 = side2
         self.opened = False
+        
     def entrar(self):
         if self.opened:
             self.side1.entrar()
@@ -110,6 +119,7 @@ class Door(MapElement):
         
         
 class Wall(MapElement):
+
     def __init__(self):
         pass # Walls don't need any special attributes
     def entrar(self):
@@ -117,10 +127,12 @@ class Wall(MapElement):
 
 
 class BombedGame(Game):
+
     def create_wall(self):
         return BombedWall()
 
 class BombedWall(Wall):
+
     def __init__(self):
         self.active = False
         
