@@ -110,7 +110,6 @@ class Door(MapElement):
         self.side1 = side1
         self.side2 = side2
         self.opened = False
-        
     def entrar(self):
         if self.opened:
             self.side1.entrar()
@@ -124,6 +123,7 @@ class Wall(MapElement):
         pass # Walls don't need any special attributes
     def entrar(self):
         print("¡No puedes entrar aquí!")
+
 
 
 class BombedGame(Game):
@@ -141,8 +141,79 @@ class BombedWall(Wall):
             print("La bomba ha explotado")
         return super().entrar()
 
+class Bicho:
 
-game = Game
+    def __init__(self, vidas, poderes):
+        self.vidas = vidas
+        self.poderes = poderes
+
+    def actua(self):
+        print("El bicho está actuando...")
+        self.usar_poder()
+
+class Modo:
+
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    def actua(self, bicho):
+        self.caminar(bicho)
+        
+    def caminar(self, bicho):
+        pass
+        
+class Agresivo(Modo):
+
+    def __init__(self):
+        super().__init__("ataque")
+
+class Perezoso(Modo):
+
+    def __init__(self):
+        super().__init__("defensa")
+
+class Orientacion: 
+    
+    def __init__(self):
+        pass
+    
+    def poner(self, orientacion): 
+        pass
+        
+class Norte(Orientacion):
+
+    def __init__(self):
+        pass
+    
+    def poner(self):
+        super().poner("norte")
+
+class Sur(Orientacion):
+
+    def __init__(self):
+        pass
+    
+    def poner(self):
+        super().poner("sur")
+    
+class Este(Orientacion):
+
+    def __init__(self):
+        pass
+    
+    def poner(self):
+        super().poner("este")
+    
+class Oeste(Orientacion):
+
+    def __init__(self):
+        pass
+    
+    def poner(self):
+        super().poner("oeste")
+    
+    
+game = Game()
 game.make2RoomsMaze()
 game.maze.entrar()
 
