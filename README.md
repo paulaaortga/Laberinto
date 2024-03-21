@@ -1,5 +1,8 @@
 # LABERINTO
 
+Patrón Builder: 
+    Se crea el proyecto builder con las clases Director y LaberintoBuilder
+
 class Game:
 
     def __init__(self):
