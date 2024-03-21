@@ -1,7 +1,24 @@
 # LABERINTO
 
-Patrón Builder: 
+Patrón Builder:
+
     Se crea el proyecto builder con las clases Director y LaberintoBuilder
+
+Patrón Decorator:
+
+    
+
+Patrón Composite: 
+
+     Se crean las clases ElementoMapa, Contenedor y Hoja
+
+Patrón Singleton: 
+
+    Se crea la clase Orientación y las subclases Norte, Sur, Este y Oeste
+
+Patrón Factory Method: 
+
+    Se crean varios métodos de fabricación dentro de la clase juego 
 
 class Game:
 
