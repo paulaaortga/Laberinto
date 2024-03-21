@@ -6,7 +6,7 @@ Patrón Builder:
 
 Patrón Decorator:
 
-    
+    Añadida la clase Decorator
 
 Patrón Composite: 
 
