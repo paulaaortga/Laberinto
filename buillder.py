@@ -44,6 +44,12 @@ class Director:
         if 'hijos' in un_dic:
             for each in un_dic['hijos']:
                 self.crear_laberinto_recursivo(each, con)
+                
+    
+    def crear_laberinto(self):
+        self.fabricar_laberinto()
+        self.builder.m
+    
 
 class LaberintoBuilder:
     def __init__(self):
@@ -59,11 +65,18 @@ class LaberintoBuilder:
     def makeDoor(self,room1, room2):
         door=Door(room1, room2)
         return door
+    
+    def makeGame(self):
+        self.game= Game()
+        return self.game
 
     def makeBombIn(self, room):
         bomb=Bomba()
         room.addChild(bomb)
         return bomb
+    
+    def makeForm(self, num):
+        return Rectangle(num)
 
     def makeRoom(self, id):
         room=Room(id)
@@ -100,8 +113,21 @@ class LaberintoBuilder:
         
         lado1.setEMinOr(pt,or1) 
         lado2.setEMinOr(pt,or2)
+        
+    def fabricarBichoAgresivo(self):
+        return Bicho(Agresivo())
+    
+    def fabricarBichoPerezoso(self):
+        return Bicho(Perezoso())
+    
+    def fabricarBichoPosicion(self, num):
+        room= self.maze.getRoom(num)
+        bicho= self.fabricarBichoPerezoso
+        bicho.posicion = room
+        self.game.addBicho(bicho)
 
 
 
 director=Director()
 director.procesar('C:\Users\erika\OneDrive\Documentos\3º Ingenieria\laberinto2hab.json')
+
