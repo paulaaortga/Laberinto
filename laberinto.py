@@ -1,4 +1,3 @@
-
 import time
 
 class ThreadManager:
@@ -112,10 +111,26 @@ class MapElement:
     def entrar(self):
         pass
 
+    def abrir(self):
+        pass
+
+    def recorrer(self):
+        pass
+
         
 class Hoja(MapElement):
     def accept(self, visitor):
         visitor.visitHoja(self)
+        
+class Tunel(Hoja):
+    def __init__(self):
+        super().__init__()
+        self.maze = None
+
+    def entrar(self, alguien):
+        self.maze.entrar(alguien)
+
+    
 
 class Decorator(Hoja):
     def __init__(self, component):
@@ -124,6 +139,8 @@ class Decorator(Hoja):
 class Contenedor(MapElement):
     def __init__(self):
         self.hijos=[]
+        self.num= None
+        self.forma= None
         
     def agregarhijo(self, hijo):
         self.hijos.append(hijo)
@@ -148,6 +165,13 @@ class Contenedor(MapElement):
         
     def goWest(self, someone):
         self.west.enter(someone)
+        
+    def recorrer(self, bloque):
+        bloque(self)
+        for hijo in self.hijos:
+            hijo.recorrer(bloque)
+            
+    
 
 class Maze(Contenedor):
     def __init__(self):
@@ -164,6 +188,12 @@ class Maze(Contenedor):
             if room.id == id:
                 return room
         return None
+    
+    def recorrer(self, bloque):
+        bloque(self)
+        for room in self.rooms:
+            room.recorrer(bloque)
+    
 
 class Room(MapElement):
     def __init__(self, id):         
@@ -176,7 +206,8 @@ class Room(MapElement):
     def entrar (self, alguien):
         print(alguien, "entrando en la habitación", self.id)
 
-        
+    def esHabitacion(self):
+        return True
         
 class Door(MapElement):
     def __init__(self, side1, side2):
@@ -188,7 +219,29 @@ class Door(MapElement):
             self.side1.entrar()
         else:
             print("¡La puerta está bloqueada!")
+
+    def recorrer(self):
+        pass
+    
+    def enter(self,someone):
+        if (self.opened):
+            if someone.position == self.side1:
+                self.side2.enter(someone)
+            else:
+                self.side1.enter(someone)
+        else:
+            print("La puerta "+str(self)+" está cerrada"+"\n")
+       
+       
+    def abrir(self):
+        self.opened = True
         
+        
+    def cerrar(self):
+        self.opened = False
+      
+    def esPuerta(self):
+        return True
         
 class Wall(MapElement):
     def __init__(self):
@@ -304,6 +357,9 @@ class Norte(Orientacion):
     
     def poner(self):
         super().poner("norte")
+        
+    def recorrer(self, bloque, contenedor):
+        contenedor.norte.recorrer(bloque)
 
 class Sur(Orientacion):
     def __init__(self):
@@ -313,6 +369,9 @@ class Sur(Orientacion):
     
     def poner(self):
         super().poner("sur")
+        
+    def recorrer(self, bloque, contenedor):
+        contenedor.sur.recorrer(bloque)
     
 class Este(Orientacion):
     def __init__(self):
@@ -322,6 +381,9 @@ class Este(Orientacion):
     
     def poner(self):
         super().poner("este")
+        
+    def recorrer(self, bloque, contenedor):
+        contenedor.este.recorrer(bloque)
     
 class Oeste(Orientacion):
     def __init__(self):
@@ -331,7 +393,88 @@ class Oeste(Orientacion):
     
     def poner(self):
         super().poner("oeste")
+        
+    def recorrer(self, bloque, contenedor):
+        contenedor.oeste.recorrer(bloque)
+        
+class Noreste(Orientacion):
+    def __init__(self):
+        if not Noreste._instance:
+            super().__init__()
+            Noreste._instance = self
+
+    def poner(self):
+        super().poner("noreste")
+
+    def recorrer(self, bloque, contenedor):
+        contenedor.noreste.recorrer(bloque)
+        
+class Noroeste(Orientacion):
+    def __init__(self):
+        if not Noroeste._instance:
+            super().__init__()
+            Noroeste._instance = self
+            
+    def recorrer(self, bloque, contenedor):
+        contenedor.noroeste.recorrer(bloque)
+        
+class Sureste(Orientacion):
+    def __init__(self):
+        if not Sureste._instance:
+            super().__init__()
+            Sureste._instance = self
+
+    def recorrer(self, bloque, contenedor):
+        contenedor.sureste.recorrer(bloque)
+        
+class Suroeste(Orientacion):
+    def __init__(self):
+        if not Suroeste._instance:
+            super().__init__()
+            Suroeste._instance = self
+
+    def recorrer(self, bloque, contenedor):
+        contenedor.suroeste.recorrer(bloque)
+        
+class Forma:
+    def __init__(self):
+        self.orientaciones = []
+        self.points = None
+        self.extent=None
+        self.num=None
+
+    def poner(self, forma):
+        pass
     
+    def recorrer(self, bloque):
+        for o in self.orientaciones:
+            o.recorrer(bloque, self)
+            
+class Cuadrado(Forma):
+    def __init__(self):
+        super().__init__()
+        self.norte = None
+        self.sur = None
+        self.este = None
+        self.oeste = None
+        self.points = None
+        self.extent = None
+        self.num = None
+
+    def poner(self):
+        super().poner("cuadrado")
+        
+    def irAlNorte(self, alguien):
+        self.norte.entrar(alguien)
+        
+    def irAlSur(self, alguien):
+        self.sur.entrar(alguien)
+        
+    def irAlEste(self, alguien):
+        self.este.entrar(alguien)
+        
+    def irAlOeste(self, alguien):
+        self.oeste.entrar(alguien)
     
 game = Game()
 alguien = "Pepito"
@@ -345,4 +488,5 @@ game.make2RoomsMazeFM()
 game = BombedGame()
 game.make2RoomsMazeFM()
 game.maze.entrar(alguien)
+
 
